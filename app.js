@@ -22,14 +22,17 @@ async function loadUsers() {
 
 /* Функция отрисовки */
 function render() {
-  if (loading) { app.innerHTML = "Загрузка…"; return; } //экран загрузки
-  if (error) { app.innerHTML = "Ошибка загрузки"; return; } // экран ошибки
+  if (loading) { app.innerHTML = '<div class="state">Загрузка…</div>'; return; }
+  if (error) { app.innerHTML = '<div class="state">Ошибка загрузки. Обнови страницу.</div>'; return; }
 
-  // карточка человека
+  //карточка человека
   app.innerHTML = users.map(u => `
     <div class="card" data-id="${u.id}">
-      <div class="name">${u.firstName} ${u.lastName}</div>
-      <div class="sub">${u.userTag} · ${u.department}</div>
+      <img src="${u.avatarUrl}" alt="">
+      <div>
+        <div class="name">${u.firstName} ${u.lastName}</div>
+        <div class="sub">${u.userTag} · ${u.department}</div>
+      </div>
     </div>
   `).join("");
 }
