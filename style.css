@@ -1,0 +1,38 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #eaf4fb;
+    color: #1f3a4d;
+}
+
+/* Шапка с поиском */
+.topbar {
+    padding: 14px 16px;
+    background: #d6ebf7;
+    border-bottom: 1px solid #b8d9ec;
+    position: sticky;
+    top: 0;
+}
+
+/* Поле поиска */
+.topbar input {
+    width: 60%;
+    max-width: 420px;
+    padding: 8px 12px;
+    border: 1px solid #a9cfe6;
+    border-radius: 20px;
+    background: #ffffff;
+    font-size: 14px;
+    outline: none;
+}
+
+/* Поле поиска при вводе */
+.topbar input:focus {
+    border-color: #6fb3d9;
+    box-shadow: 0 0 0 3px rgba(111, 179, 217, 0.2);
+}
