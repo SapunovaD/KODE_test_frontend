@@ -2,6 +2,7 @@
 
 ## Что это
 Тестовое задание на стажировку KODE: список сотрудников компании с поиском, вкладками по департаментам, сортировкой и страницей деталей
+
 Ссылка на задание: https://github.com/Hexlet/ru-test-assignments/blob/main/frontend/kode/trainee-test-frontend.md
 
 ## Что сделано
