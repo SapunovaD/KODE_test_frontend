@@ -8,16 +8,23 @@ body {
 
 /* Шапка с поиском */
 .topbar {
-  padding: 14px 16px;
+  padding: 14px 16px 0;
   background: #d6ebf7;
   border-bottom: 1px solid #b8d9ec;
   position: sticky;
   top: 0;
 }
 
+/* Строка: поиск + кнопка сортировки */
+.topbar-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 /* Поле поиска */
 .topbar input {
-  width: 60%;
+  flex: 1;
   max-width: 420px;
   padding: 8px 12px;
   border: 1px solid #a9cfe6;
@@ -31,6 +38,49 @@ body {
 .topbar input:focus {
   border-color: #6fb3d9;
   box-shadow: 0 0 0 3px rgba(111, 179, 217, 0.2);
+}
+
+/* Кнопка сортировки */
+.sort-btn {
+  padding: 8px 14px;
+  border: 1px solid #a9cfe6;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #1f3a4d;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sort-btn:hover { background: #f2f9fe; }
+
+/* Полоса вкладок */
+.tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Одна вкладка */
+.tab {
+  padding: 6px 12px;
+  border: 1px solid #a9cfe6;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #1f3a4d;
+  font-size: 13px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.tab:hover { background: #f2f9fe; }
+
+/* Активная вкладка */
+.tab.active {
+  background: #6fb3d9;
+  color: #ffffff;
+  border-color: #6fb3d9;
 }
 
 /* Карточка человека в списке */
