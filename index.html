@@ -9,10 +9,17 @@
 </head>
 
 <body>
+
   <header class="topbar">
-    <input id="search" type="text" placeholder="Поиск по имени, фамилии или нику">
+    <div class="topbar-row">
+      <input id="search" type="text" placeholder="Поиск по имени, фамилии или нику">
+      <button id="sortBtn" class="sort-btn">А→Я</button>
+    </div>
+    <nav id="tabs" class="tabs"></nav>
   </header>
+
   <main id="app"></main>
+
   <script src="app.js"></script>
 </body>
 
