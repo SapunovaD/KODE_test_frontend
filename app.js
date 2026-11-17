@@ -1,11 +1,32 @@
 const API = "https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users?__example=all";
 const app = document.getElementById("app");
 const searchInput = document.getElementById("search");
+const sortBtn = document.getElementById("sortBtn");
+const tabsEl = document.getElementById("tabs");
 
 let users = []; // человеки
 let loading = true; // идёт ли загрузка
 let error = false; // есть ли ошибка
 let query = ""; // ввод поиска
+let activeDept = "all"; // активная вкладка
+let sortMode = "alpha"; // режим сортировки: alpha — по алфавиту, birthday — по др
+
+// Список департаментов: значение из API -> подпись на вкладке
+const DEPARTMENTS = [
+  { key: "all", label: "Все" },
+  { key: "android", label: "Android" },
+  { key: "ios", label: "iOS" },
+  { key: "design", label: "Дизайн" },
+  { key: "management", label: "Менеджмент" },
+  { key: "qa", label: "QA" },
+  { key: "back_office", label: "Бэк-офис" },
+  { key: "frontend", label: "Frontend" },
+  { key: "hr", label: "HR" },
+  { key: "pr", label: "PR" },
+  { key: "backend", label: "Backend" },
+  { key: "support", label: "Техподдержка" },
+  { key: "analytics", label: "Аналитика" },
+];
 
 /* Загрузка людей */
 async function loadUsers() {
@@ -22,14 +43,56 @@ async function loadUsers() {
   }
 }
 
-// Фильтр по поиску
+// Фильтр по поиску и вкладке
 function filtered() {
   const q = query.toLowerCase().trim();
-  if (!q) return users;
-  return users.filter(u =>
-    (u.firstName + " " + u.lastName).toLowerCase().includes(q) ||
-    u.userTag.toLowerCase().includes(q)
-  );
+  let list = users;
+
+  // фильтр по департаменту (вкладка)
+  if (activeDept !== "all") {
+    list = list.filter(u => u.department === activeDept);
+  }
+
+  // фильтр по поиску
+  if (q) {
+    list = list.filter(u =>
+      (u.firstName + " " + u.lastName).toLowerCase().includes(q) ||
+      u.userTag.toLowerCase().includes(q)
+    );
+  }
+
+  // сортировка
+  if (sortMode === "alpha") {
+    list = [...list].sort((a, b) => a.firstName.localeCompare(b.firstName));
+  } else if (sortMode === "birthday") {
+    // сортировка по дню рождения (ближайший сверху)
+    list = [...list].sort((a, b) => {
+      const today = new Date();
+      const da = new Date(a.birthday);
+      const db = new Date(b.birthday);
+      da.setFullYear(today.getFullYear());
+      db.setFullYear(today.getFullYear());
+      if (da < today) da.setFullYear(today.getFullYear() + 1);
+      if (db < today) db.setFullYear(today.getFullYear() + 1);
+      return da - db;
+    });
+  }
+
+  return list;
+}
+
+// Рисуем вкладки
+function renderTabs() {
+  tabsEl.innerHTML = DEPARTMENTS.map(d => `
+    <button class="tab ${d.key === activeDept ? "active" : ""}" data-key="${d.key}">${d.label}</button>
+  `).join("");
+
+  tabsEl.querySelectorAll(".tab").forEach(el => {
+    el.onclick = () => {
+      activeDept = el.dataset.key;
+      render();
+    };
+  });
 }
 
 /* Функция отрисовки */
@@ -50,6 +113,9 @@ function render() {
 
   // Экран ошибки
   if (error) { app.innerHTML = '<div class="state">Ошибка загрузки. Обнови страницу.</div>'; return; }
+
+  // Рисуем вкладки
+  renderTabs();
 
   // Список людей
   const list = filtered();
@@ -96,7 +162,20 @@ searchInput.oninput = (e) => {
   if (!location.hash.startsWith("#user/")) render();
 };
 
+// Кнопка сортировки: переключает режим
+sortBtn.onclick = () => {
+  sortMode = sortMode === "alpha" ? "birthday" : "alpha";
+  sortBtn.textContent = sortMode === "alpha" ? "А→Я" : "ДР";
+  if (!location.hash.startsWith("#user/")) render();
+};
+
 // Реакция на клик по карточке, кнопка Назад
-window.onhashchange = render;
+window.onhashchange = () => {
+  // при возврате на главную восстанавливаем поиск
+  if (!location.hash.startsWith("#user/")) {
+    searchInput.value = query;
+  }
+  render();
+};
 
 loadUsers();
